@@ -7,7 +7,7 @@ struct SwiftBitesApp: App {
     WindowGroup {
       ContentView()
         .environment(\.storage, Storage())
-        .modelContainer(for: Ingredient.self)
+        .modelContainer(for: [Ingredient.self, Recipe.self, RecipeIngredient.self, Category.self])
     }
   }
 }

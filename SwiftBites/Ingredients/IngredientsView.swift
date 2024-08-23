@@ -11,8 +11,8 @@ struct IngredientsView: View {
   }
 
 //  @Environment(\.storage) private var storage
-    @Query(sort: \Ingredient.name) private var ingredients: [Ingredient]
     @Environment(\.modelContext) private var context
+    @Query(sort: \Ingredient.name) private var ingredients: [Ingredient]
     @Environment(\.dismiss) private var dismiss
     @State private var query = ""
 
