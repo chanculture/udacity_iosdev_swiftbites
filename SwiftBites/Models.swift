@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 /**
  * This file contains temporary models that should be replaced when adding SwiftData.
@@ -25,6 +26,22 @@ struct MockIngredient: Identifiable, Hashable, Codable {
     self.id = id
     self.name = name
   }
+}
+
+@Model
+final class Ingredient {
+    let id: UUID
+    var name: String
+
+    init(name: String = ""){
+        self.id = UUID()
+        self.name = name
+    }
+    
+    init(id: UUID = UUID(), name: String = "") {
+        self.id = id
+        self.name = name
+    }
 }
 
 struct MockRecipeIngredient: Identifiable, Hashable, Codable {
