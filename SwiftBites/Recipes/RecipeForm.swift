@@ -31,7 +31,6 @@ struct RecipeForm: View {
             _instructions = .init(initialValue: recipe.instructions)
             _ingredients = .init(initialValue: recipe.ingredients)
             _category = .init(initialValue: recipe.category)
-//            _categoryId = .init(initialValue: recipe.category?.id)
             _imageData = .init(initialValue: recipe.imageData)
             
         }
@@ -44,17 +43,14 @@ struct RecipeForm: View {
     @State private var time: Int
     @State private var instructions: String
     @State private var category: Category?
-//    @State private var categoryId: Category.ID?
     @State private var ingredients: [RecipeIngredient]
     @State private var imageItem: PhotosPickerItem?
     @State private var imageData: Data?
     @State private var isIngredientsPickerPresented =  false
     @State private var error: Error?
     @Environment(\.dismiss) private var dismiss
-//    @Environment(\.storage) private var storage
     @Environment(\.modelContext) private var context
     @Query private var categories: [Category]
-//    @Query private var ingredients: [RecipeIngredient]
     
     // MARK: - Body
     
@@ -95,20 +91,18 @@ struct RecipeForm: View {
         IngredientsView { selectedIngredient in
             switch mode {
             case .add:
-                print("placeholder")
+                let recipeIngredient = RecipeIngredient(ingredient: selectedIngredient,
+                                                        quantity: "")
+                context.insert(recipeIngredient)
+                ingredients.append(recipeIngredient)
             case .edit(let recipe):
                 let recipeIngredient = RecipeIngredient(recipe: recipe,
                                                         ingredient: selectedIngredient,
                                                         quantity: "")
                 context.insert(recipeIngredient)
                 ingredients.append(recipeIngredient)
+                
             }
-//            let recipeIngredient = RecipeIngredient(ingredient: selectedIngredient,
-//                                                    quantity: "")
-////            recipe.ingredients.append(recipeIngredient)
-////            ingredients.append(recipeIngredient)
-//            context.insert(recipeIngredient)
-//            ingredients.append(recipeIngredient)
         }
     }
     
@@ -173,16 +167,6 @@ struct RecipeForm: View {
     }
     
     @ViewBuilder
-//    private var categorySection: some View {
-//        Section {
-//            Picker("Category", selection: $categoryId) {
-//                Text("None").tag(nil as Category.ID?)
-//                ForEach(categories) { category in
-//                    Text(category.name).tag(category.id as Category.ID?)
-//                }
-//            }
-//        }
-//    }
     
     private var categorySection: some View {
         Section {
@@ -223,7 +207,6 @@ struct RecipeForm: View {
                 )
             } else {
                 ForEach(ingredients) { ingredient in
-//                List(ingredients) { ingredient in
                     HStack(alignment: .center) {
 //                        Text(ingredient.ingredient.name)
                         Text(ingredient.ingredientName)
@@ -296,30 +279,16 @@ struct RecipeForm: View {
         guard case .edit(let recipe) = mode else {
             fatalError("Delete unavailable in add mode")
         }
-//        storage.deleteRecipe(id: recipe.id)
-        context.delete(recipe)
+        do {
+            context.delete(recipe)
+            try context.save()
+        } catch {
+            self.error = error
+        }
+//        context.delete(recipe)
         dismiss()
     }
     
-//    func deleteComment(from post: Post, comment: Comment) {
-//        if let index = post.comments.firstIndex(of: comment) {
-//            post.comments.remove(at: index)  // Remove the comment from the post's comments array
-//            try? SwiftData.delete(comment)  // Delete the comment from persistent storage
-//            try? SwiftData.save(post)  // Save the updated post
-//        }
-//    }
-    
-//    func deleteIngredients(offsets: IndexSet) {
-//        withAnimation {
-//            do {
-//                let deleteRecipeIngredient = ingredients.first(where: {$0 == })
-//                ingredients.remove(atOffsets: offsets)
-//                try context.save()
-//            } catch {
-//                self.error = error
-//            }
-//        }
-//    }
     
     private func deleteIngredient(ingredient: RecipeIngredient) {
         do {
@@ -334,31 +303,40 @@ struct RecipeForm: View {
     }
     
     func save() {
-//        let category = storage.categories.first(where: { $0.id == categoryId })
+//        let categoryChange = previousCategory == category
         category = categories.first(where: { $0 == category })
         
         do {
             switch mode {
             case .add:
-//                try storage.addRecipe(
-//                    name: name,
-//                    summary: summary,
-//                    category: category,
-//                    serving: serving,
-//                    time: time,
-//                    ingredients: ingredients,
-//                    instructions: instructions,
-//                    imageData: imageData
-//                )
-                context.insert(Recipe(name: name,
-                                      summary: summary,
-                                      category: category,
-                                      serving: serving,
-                                      time: time,
-                                      ingredients: ingredients,
-                                      instructions: instructions,
-                                      imageData: imageData))
+                
+                let recipe = Recipe(name: name,
+                                    summary: summary,
+                                    category: category,
+                                    serving: serving,
+                                    time: time,
+                                    ingredients: [],
+                                    instructions: instructions,
+                                    imageData: imageData)
+                context.insert(recipe)
+                
+                for ingredient in ingredients {
+                    ingredient.recipe = recipe
+                }
+                
+                // Manually add recipe to the category's recipe list
+                if (category != nil) {
+                    category?.recipes.append(recipe)
+                }
+                
+                try context.save()
+                
             case .edit(let recipe):
+                // Manually set old category's recipes, if recipe existed.
+                if let previousCategory = recipe.category {
+                    previousCategory.recipes.removeAll { $0 == recipe }
+                }
+                
                 recipe.name = name
                 recipe.summary = summary
                 recipe.category = category
@@ -367,18 +345,12 @@ struct RecipeForm: View {
                 recipe.ingredients = ingredients
                 recipe.instructions = instructions
                 recipe.imageData = imageData
+                
+                // Manually add recipe to the category's recipe list
+                if (category != nil) {
+                    category?.recipes.append(recipe)
+                }
                 try context.save()
-//                try storage.updateRecipe(
-//                    id: recipe.id,
-//                    name: name,
-//                    summary: summary,
-//                    category: category,
-//                    serving: serving,
-//                    time: time,
-//                    ingredients: ingredients,
-//                    instructions: instructions,
-//                    imageData: imageData
-//                )
             }
             dismiss()
         } catch {

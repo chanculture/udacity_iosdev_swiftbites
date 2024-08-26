@@ -10,7 +10,6 @@ struct IngredientsView: View {
     self.selection = selection
   }
 
-//  @Environment(\.storage) private var storage
     @Environment(\.modelContext) private var context
     @Query(sort: \Ingredient.name) private var ingredients: [Ingredient]
     @Environment(\.dismiss) private var dismiss

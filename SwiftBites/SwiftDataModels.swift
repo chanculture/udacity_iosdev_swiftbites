@@ -9,11 +9,12 @@ import Foundation
 import SwiftData
 
 @Model
-final class Category: Identifiable, Hashable {
+final class Category: Identifiable, Hashable, Equatable {
     let id = UUID()
     @Attribute(.unique) var name: String
+    
     @Relationship(deleteRule: .nullify, inverse: \Recipe.category)
-    var recipes: [Recipe] = []
+    var recipes: [Recipe]
     
     init(id: UUID = UUID(), name: String = "", recipes: [Recipe] = []) {
         self.id = id
@@ -31,22 +32,18 @@ final class Category: Identifiable, Hashable {
 }
 
 @Model
-final class Ingredient: Identifiable, Hashable {
+final class Ingredient: Identifiable, Hashable, Equatable {
     let id = UUID()
     @Attribute(.unique) var name: String
-    @Relationship(deleteRule: .nullify)
-    var recipeIngredients: [RecipeIngredient] = []
 
     init(name: String = ""){
         self.id = UUID()
         self.name = name
-        recipeIngredients = []
     }
 
     init(id: UUID = UUID(), name: String = "") {
         self.id = id
         self.name = name
-        recipeIngredients = []
     }
     
     func hash(into hasher: inout Hasher) {
@@ -59,13 +56,10 @@ final class Ingredient: Identifiable, Hashable {
 }
 
 @Model
-final class RecipeIngredient: Identifiable, Hashable {
-    @Attribute(.unique) let id = UUID()
+final class RecipeIngredient: Identifiable, Hashable, Equatable {
+    var id = UUID()
     
-    @Relationship(deleteRule: .nullify, inverse: \Ingredient.recipeIngredients)
-    var ingredient: Ingredient?
-    
-    @Relationship(deleteRule: .nullify, inverse: \Recipe.ingredients)
+    @Relationship(deleteRule: .nullify)
     var recipe: Recipe?
     
     var quantity: String
@@ -78,27 +72,18 @@ final class RecipeIngredient: Identifiable, Hashable {
     ) {
         self.id = UUID()
         self.recipe = recipe
-        self.ingredient = ingredient
         self.quantity = quantity
         self.ingredientName = ingredient.name
     }
     
-//    init(
-//        id: UUID = UUID(),
-//        ingredient: Ingredient = Ingredient(),
-//        quantity: String = ""
-//    ) {
-//        self.id = id
-//        self.ingredient = ingredient
-//        self.quantity = quantity
-//        self.ingredientName = ingredient.name
-//    }
+    init(
+        ingredient: Ingredient = Ingredient(),
+        quantity: String = ""
+    ) {
+        self.quantity = quantity
+        self.ingredientName = ingredient.name
+    }
     
-//    init(id: UUID = UUID(), ingredient: Ingredient = Ingredient(), quantity: String = "") {
-//        self.id = id
-//        self.ingredient = ingredient
-//        self.quantity = quantity
-//    }
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -110,17 +95,19 @@ final class RecipeIngredient: Identifiable, Hashable {
 }
 
 @Model
-final class Recipe: Identifiable, Hashable {
+final class Recipe: Identifiable, Hashable, Equatable {
     let id: UUID
     @Attribute(.unique) var name: String
     var summary: String
     
+    @Relationship
     var category: Category?
     var serving: Int
     var time: Int
     
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .cascade, inverse: \RecipeIngredient.recipe)
     var ingredients: [RecipeIngredient]
+    
     var instructions: String
     var imageData: Data?
     

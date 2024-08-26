@@ -10,11 +10,11 @@ struct ContentView: View {
 
   var body: some View {
     TabView {
-//      RecipesView()
-//        .tabItem {
-//          Label("Recipes", systemImage: "frying.pan")
-//        }
-//
+      RecipesView()
+        .tabItem {
+          Label("Recipes", systemImage: "frying.pan")
+        }
+
       CategoriesView()
         .tabItem {
           Label("Categories", systemImage: "tag")
@@ -97,17 +97,11 @@ struct ContentView: View {
 //        } catch {
 //            print("Failed to save Ingredients & Categories.")
 //        }
-//          
+//
+//        
 //        let italianCategory = categories.first( where: { $0.name == "Italian" } )
 //        let middleEasternCategory = categories.first( where: { $0.name == "Middle Eastern" } )
-//        
-//        let ingredientPizzadough = ingredients.first(where: {$0.name == "Pizza Dough"})
-//        let ingredientTomatoSauce = ingredients.first(where: {$0.name == "Tomato Sauce"})
-//        let ingredientMozzarellaCheese = ingredients.first(where: {$0.name == "Mozzarella Cheese"})
-//        let ingredientFreshBasilLeaves = ingredients.first(where: {$0.name == "Fresh Basil Leaves"})
-//        let ingredientExtraVirginOliveOil = ingredients.first(where: {$0.name == "Extra Virgin Olive Oil"})
-//        let ingredientSalt = ingredients.first(where: {$0.name == "Salt"})
-//        
+//  
 //        let margherita = Recipe(
 //          name: "Classic Margherita Pizza",
 //          summary: "A simple yet delicious pizza with tomato, mozzarella, basil, and olive oil.",
@@ -120,7 +114,13 @@ struct ContentView: View {
 //        )
 //        
 //        context.insert(margherita)
-//        
+//        let ingredientPizzadough = ingredients.first(where: {$0.name == "Pizza Dough"})
+//        let ingredientTomatoSauce = ingredients.first(where: {$0.name == "Tomato Sauce"})
+//        let ingredientMozzarellaCheese = ingredients.first(where: {$0.name == "Mozzarella Cheese"})
+//        let ingredientFreshBasilLeaves = ingredients.first(where: {$0.name == "Fresh Basil Leaves"})
+//        let ingredientExtraVirginOliveOil = ingredients.first(where: {$0.name == "Extra Virgin Olive Oil"})
+//        let ingredientSalt = ingredients.first(where: {$0.name == "Salt"})
+//
 //        margherita.ingredients = [
 //            RecipeIngredient(recipe: margherita, ingredient: ingredientPizzadough!, quantity: "1 ball"),
 //            RecipeIngredient(recipe: margherita, ingredient: ingredientTomatoSauce!, quantity: "1/2 cup"),
@@ -130,10 +130,37 @@ struct ContentView: View {
 //            RecipeIngredient(recipe: margherita, ingredient: ingredientSalt!, quantity: "Pinch"),
 //          ]
 //        
+//        let spaghettiCarbonara = Recipe(
+//            name: "Spaghetti Carbonara",
+//            summary: "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
+//            category: italianCategory,
+//            serving: 4,
+//            time: 30,
+//            ingredients: [],
+//            instructions: "Cook spaghetti. Fry pancetta until crisp. Whisk eggs and Parmesan, add to pasta with pancetta, and season with black pepper.",
+//            imageData: UIImage(named: "spaghettiCarbonara")?.pngData()
+//        )
+//        
+//        context.insert(spaghettiCarbonara)
+//        
+//        let ingredientspaghetti = ingredients.first(where: {$0.name == "Spaghetti"})
+//        let ingredienteggs = ingredients.first(where: {$0.name == "Eggs"})
+//        let ingredientparmesanCheese = ingredients.first(where: {$0.name == "Parmesan Cheese"})
+//        let ingredientpancetta = ingredients.first(where: {$0.name == "Pancetta"})
+//        let ingredientblackPepper = ingredients.first(where: {$0.name == "Black Pepper"})
+//        
+//        spaghettiCarbonara.ingredients = [
+//            RecipeIngredient(recipe: spaghettiCarbonara, ingredient: ingredientspaghetti!, quantity: "400g"),
+//            RecipeIngredient(recipe: spaghettiCarbonara,ingredient: ingredienteggs!, quantity: "4"),
+//            RecipeIngredient(recipe: spaghettiCarbonara,ingredient: ingredientparmesanCheese!, quantity: "1 cup, grated"),
+//            RecipeIngredient(recipe: spaghettiCarbonara,ingredient: ingredientpancetta!, quantity: "200g, diced"),
+//            RecipeIngredient(recipe: spaghettiCarbonara,ingredient: ingredientblackPepper!, quantity: "To taste"),
+//        ]
+//
 //        do {
 //            try context.save()
 //        } catch {
-//            print("Failed to save Classic Margherita Pizza recipe.")
+//            print("Failed to save Carbonara recipe.")
 //        }
           
 //

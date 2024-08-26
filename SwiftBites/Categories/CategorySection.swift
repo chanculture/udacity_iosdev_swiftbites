@@ -3,8 +3,17 @@ import SwiftData
 
 struct CategorySection: View {
 
-    let category: Category
+    var category: Category
+//    @Query (filter: #Predicate<Recipe> { $0.category == category })
+//    private var recipes: [Recipe]
+//    @Query private var categories: [Category]
+//    @Query private var recipes: [Recipe]
     
+//    init() {
+//        _recipes = Query(filter: {
+//            return $0.category == category
+//        })
+//    }
     // MARK: - Body
     
     var body: some View {
@@ -34,7 +43,7 @@ struct CategorySection: View {
     
     var list: some View {
         ScrollView(.horizontal) {
-            LazyHStack(spacing: 0) {
+            HStack(spacing: 0) {
                 ForEach(category.recipes, id: \.name) { recipe in
                     RecipeCell(recipe: recipe)
                         .containerRelativeFrame(.horizontal, count: 12, span: 11, spacing: 0)

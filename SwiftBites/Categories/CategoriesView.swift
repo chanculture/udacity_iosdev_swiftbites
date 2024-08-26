@@ -2,10 +2,11 @@ import SwiftUI
 import SwiftData
 
 struct CategoriesView: View {
-//    @Environment(\.storage) private var storage
-    @Environment(\.modelContext) private var context
+
     @Query(sort: \Category.name) private var categories: [Category]
     @Query private var recipes: [Recipe]
+    @Environment(\.modelContext) private var context
+    
     @State private var query = ""
     
     // MARK: - Body

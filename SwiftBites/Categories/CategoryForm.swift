@@ -1,5 +1,5 @@
 import SwiftUI
-import SwiftData
+//import SwiftData
 
 struct CategoryForm: View {
     enum Mode: Hashable {
