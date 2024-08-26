@@ -68,8 +68,19 @@ struct CategoryForm: View {
     // MARK: - Data
     
     private func delete(category: Category) {
-        context.delete(category)
-        dismiss()
+        do {
+            let recipes = category.recipes
+            for recipe in recipes {
+                recipe.category = nil
+            }
+            
+            context.delete(category)
+            try context.save()
+            dismiss()
+        }
+        catch {
+            self.error = error
+        }
     }
     
     private func save() {

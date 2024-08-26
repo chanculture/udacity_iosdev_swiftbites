@@ -208,7 +208,7 @@ struct RecipeForm: View {
             } else {
                 ForEach(ingredients) { ingredient in
                     HStack(alignment: .center) {
-//                        Text(ingredient.ingredient.name)
+
                         Text(ingredient.ingredientName)
                             .bold()
                             .layoutPriority(2)
@@ -232,7 +232,7 @@ struct RecipeForm: View {
                         }
                     }
                 }
-//                .onDelete(perform: deleteIngredients)
+
                 
                 Button("Add Ingredient") {
                     isIngredientsPickerPresented = true
@@ -285,7 +285,7 @@ struct RecipeForm: View {
         } catch {
             self.error = error
         }
-//        context.delete(recipe)
+
         dismiss()
     }
     
@@ -303,7 +303,6 @@ struct RecipeForm: View {
     }
     
     func save() {
-//        let categoryChange = previousCategory == category
         category = categories.first(where: { $0 == category })
         
         do {
@@ -332,7 +331,7 @@ struct RecipeForm: View {
                 try context.save()
                 
             case .edit(let recipe):
-                // Manually set old category's recipes, if recipe existed.
+                // Manually remove recipe from old category, if old category existed.
                 if let previousCategory = recipe.category {
                     previousCategory.recipes.removeAll { $0 == recipe }
                 }
@@ -346,7 +345,7 @@ struct RecipeForm: View {
                 recipe.instructions = instructions
                 recipe.imageData = imageData
                 
-                // Manually add recipe to the category's recipe list
+                // Manually add recipe to the (new) category's recipe list
                 if (category != nil) {
                     category?.recipes.append(recipe)
                 }

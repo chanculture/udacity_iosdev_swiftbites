@@ -7,8 +7,6 @@ struct RecipesView: View {
     @Environment(\.modelContext) private var context
     @State private var query = ""
     @State private var sortOrder = SortDescriptor(\Recipe.name)
-//    @Query(sort: \Ingredient.name) private var ingredients: [Ingredient]
-    
     
     // MARK: - Body
     
