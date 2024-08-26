@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 
 
-
 struct IngredientForm: View {
     enum Mode: Hashable {
         case add

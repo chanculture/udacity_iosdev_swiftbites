@@ -30,14 +30,35 @@ struct ContentView: View {
 //    }
     .task{
         
-// TASK: Insert ingredients
+////START UNCOMMENT
+//// TASK: Delete Categories
+//        do {
+//            try context.delete(model: Category.self)
+//        } catch {
+//            print("Failed to delete all Categories.")
+//        }
+//        
+////// TASK: Delete Recipes
+//        do {
+//            try context.delete(model: Recipe.self)
+//        } catch {
+//            print("Failed to delete all Recipes.")
+//        }
+//
+// ////TASK: Delete ingredients
 //        do {
 //            try context.delete(model: Ingredient.self)
 //        } catch {
 //            print("Failed to delete all Ingredients.")
 //        }
-//        
-
+//////TASK: Delete RecipeIngredients
+//        do {
+//            try context.delete(model: RecipeIngredient.self)
+//            try context.save()
+//        } catch {
+//            print("Failed to delete all Ingredients.")
+//        }
+//
 //        context.insert(Ingredient(name:"Pizza Dough"))
 //        context.insert(Ingredient(name:"Tomato Sauce"))
 //        context.insert(Ingredient(name:"Mozzarella Cheese"))
@@ -67,25 +88,16 @@ struct ContentView: View {
 //        context.insert(Ingredient(name:"Cardamom"))
 //        context.insert(Ingredient(name:"Cinnamon"))
 //        context.insert(Ingredient(name:"Turmeric"))
-        
-// TASK: Insert Categories
-//        do {
-//            try context.delete(model: Category.self)
-//        } catch {
-//            print("Failed to delete all Categories.")
-//        }
-        
+//        
 //        context.insert(Category(name:"Italian"))
 //        context.insert(Category(name:"Middle Eastern"))
-        
-// TASK: Insert Some recipes with Categories
-        
-//        do {
-//            try context.delete(model: Recipe.self)
-//        } catch {
-//            print("Failed to delete all Recipes.")
-//        }
 //        
+//        do {
+//            try context.save()
+//        } catch {
+//            print("Failed to save Ingredients & Categories.")
+//        }
+//          
 //        let italianCategory = categories.first( where: { $0.name == "Italian" } )
 //        let middleEasternCategory = categories.first( where: { $0.name == "Middle Eastern" } )
 //        
@@ -102,19 +114,30 @@ struct ContentView: View {
 //          category: italianCategory,
 //          serving: 4,
 //          time: 50,
-//          ingredients: [
-//            RecipeIngredient(ingredient: ingredientPizzadough!, quantity: "1 ball"),
-//            RecipeIngredient(ingredient: ingredientTomatoSauce!, quantity: "1/2 cup"),
-//            RecipeIngredient(ingredient: ingredientMozzarellaCheese!, quantity: "1 cup, shredded"),
-//            RecipeIngredient(ingredient: ingredientFreshBasilLeaves!, quantity: "A handful"),
-//            RecipeIngredient(ingredient: ingredientExtraVirginOliveOil!, quantity: "2 tablespoons"),
-//            RecipeIngredient(ingredient: ingredientSalt!, quantity: "Pinch"),
-//          ],
+//          ingredients: [],
 //          instructions: "Preheat oven, roll out dough, apply sauce, add cheese and basil, bake for 20 minutes.",
 //          imageData: UIImage(named: "margherita")?.pngData()
 //        )
 //        
 //        context.insert(margherita)
+//        
+//        margherita.ingredients = [
+//            RecipeIngredient(recipe: margherita, ingredient: ingredientPizzadough!, quantity: "1 ball"),
+//            RecipeIngredient(recipe: margherita, ingredient: ingredientTomatoSauce!, quantity: "1/2 cup"),
+//            RecipeIngredient(recipe: margherita, ingredient: ingredientMozzarellaCheese!, quantity: "1 cup, shredded"),
+//            RecipeIngredient(recipe: margherita, ingredient: ingredientFreshBasilLeaves!, quantity: "A handful"),
+//            RecipeIngredient(recipe: margherita, ingredient: ingredientExtraVirginOliveOil!, quantity: "2 tablespoons"),
+//            RecipeIngredient(recipe: margherita, ingredient: ingredientSalt!, quantity: "Pinch"),
+//          ]
+//        
+//        do {
+//            try context.save()
+//        } catch {
+//            print("Failed to save Classic Margherita Pizza recipe.")
+//        }
+          
+//
+////// END UNCOMMENT
         
     }
   }

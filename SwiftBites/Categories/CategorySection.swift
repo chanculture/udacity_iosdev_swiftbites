@@ -1,7 +1,8 @@
 import SwiftUI
+import SwiftData
 
 struct CategorySection: View {
-//    let category: MockCategory
+
     let category: Category
     
     // MARK: - Body

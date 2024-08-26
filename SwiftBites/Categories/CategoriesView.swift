@@ -24,9 +24,9 @@ struct CategoriesView: View {
                 .navigationDestination(for: CategoryForm.Mode.self) { mode in
                     CategoryForm(mode: mode)
                 }
-//                .navigationDestination(for: RecipeForm.Mode.self) { mode in
-//                    RecipeForm(mode: mode)
-//                }
+                .navigationDestination(for: RecipeForm.Mode.self) { mode in
+                    RecipeForm(mode: mode)
+                }
         }
     }
     
@@ -46,20 +46,6 @@ struct CategoriesView: View {
             })
         }
     }
-    
-//    private var content: some View {
-//        if storage.categories.isEmpty {
-//            empty
-//        } else {
-//            list(for: storage.categories.filter {
-//                if query.isEmpty {
-//                    return true
-//                } else {
-//                    return $0.name.localizedStandardContains(query)
-//                }
-//            })
-//        }
-//    }
     
     private var empty: some View {
         ContentUnavailableView(

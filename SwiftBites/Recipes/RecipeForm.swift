@@ -30,7 +30,8 @@ struct RecipeForm: View {
             _time = .init(initialValue: recipe.time)
             _instructions = .init(initialValue: recipe.instructions)
             _ingredients = .init(initialValue: recipe.ingredients)
-            _categoryId = .init(initialValue: recipe.category?.id)
+            _category = .init(initialValue: recipe.category)
+//            _categoryId = .init(initialValue: recipe.category?.id)
             _imageData = .init(initialValue: recipe.imageData)
             
         }
@@ -42,7 +43,8 @@ struct RecipeForm: View {
     @State private var serving: Int
     @State private var time: Int
     @State private var instructions: String
-    @State private var categoryId: Category.ID?
+    @State private var category: Category?
+//    @State private var categoryId: Category.ID?
     @State private var ingredients: [RecipeIngredient]
     @State private var imageItem: PhotosPickerItem?
     @State private var imageData: Data?
@@ -91,9 +93,22 @@ struct RecipeForm: View {
     
     private func ingredientPicker() -> some View {
         IngredientsView { selectedIngredient in
-            let recipeIngredient = RecipeIngredient(ingredient: selectedIngredient, quantity: "")
+            switch mode {
+            case .add:
+                print("placeholder")
+            case .edit(let recipe):
+                let recipeIngredient = RecipeIngredient(recipe: recipe,
+                                                        ingredient: selectedIngredient,
+                                                        quantity: "")
+                context.insert(recipeIngredient)
+                ingredients.append(recipeIngredient)
+            }
+//            let recipeIngredient = RecipeIngredient(ingredient: selectedIngredient,
+//                                                    quantity: "")
+////            recipe.ingredients.append(recipeIngredient)
+////            ingredients.append(recipeIngredient)
+//            context.insert(recipeIngredient)
 //            ingredients.append(recipeIngredient)
-            context.insert(recipeIngredient)
         }
     }
     
@@ -158,12 +173,23 @@ struct RecipeForm: View {
     }
     
     @ViewBuilder
+//    private var categorySection: some View {
+//        Section {
+//            Picker("Category", selection: $categoryId) {
+//                Text("None").tag(nil as Category.ID?)
+//                ForEach(categories) { category in
+//                    Text(category.name).tag(category.id as Category.ID?)
+//                }
+//            }
+//        }
+//    }
+    
     private var categorySection: some View {
         Section {
-            Picker("Category", selection: $categoryId) {
-                Text("None").tag(nil as MockCategory.ID?)
+            Picker("Category", selection: $category) {
+                Text("None").tag(Category())
                 ForEach(categories) { category in
-                    Text(category.name).tag(category.id as MockCategory.ID?)
+                    Text(category.name).tag(category as Category?)
                 }
             }
         }
@@ -197,8 +223,10 @@ struct RecipeForm: View {
                 )
             } else {
                 ForEach(ingredients) { ingredient in
+//                List(ingredients) { ingredient in
                     HStack(alignment: .center) {
-                        Text(ingredient.ingredient.name)
+//                        Text(ingredient.ingredient.name)
+                        Text(ingredient.ingredientName)
                             .bold()
                             .layoutPriority(2)
                         Spacer()
@@ -214,8 +242,14 @@ struct RecipeForm: View {
                         ))
                         .layoutPriority(1)
                     }
+                    .swipeActions {
+                        Button("Delete", systemImage: "trash", role: .destructive) {
+                            deleteIngredient(ingredient: ingredient)
+                          context.delete(ingredient)
+                        }
+                    }
                 }
-                .onDelete(perform: deleteIngredients)
+//                .onDelete(perform: deleteIngredients)
                 
                 Button("Add Ingredient") {
                     isIngredientsPickerPresented = true
@@ -267,15 +301,41 @@ struct RecipeForm: View {
         dismiss()
     }
     
-    func deleteIngredients(offsets: IndexSet) {
-        withAnimation {
-//            ingredients.remove(atOffsets: offsets)
+//    func deleteComment(from post: Post, comment: Comment) {
+//        if let index = post.comments.firstIndex(of: comment) {
+//            post.comments.remove(at: index)  // Remove the comment from the post's comments array
+//            try? SwiftData.delete(comment)  // Delete the comment from persistent storage
+//            try? SwiftData.save(post)  // Save the updated post
+//        }
+//    }
+    
+//    func deleteIngredients(offsets: IndexSet) {
+//        withAnimation {
+//            do {
+//                let deleteRecipeIngredient = ingredients.first(where: {$0 == })
+//                ingredients.remove(atOffsets: offsets)
+//                try context.save()
+//            } catch {
+//                self.error = error
+//            }
+//        }
+//    }
+    
+    private func deleteIngredient(ingredient: RecipeIngredient) {
+        do {
+            if let index = ingredients.firstIndex(of: ingredient) {
+                ingredients.remove(at: index)
+            }
+            context.delete(ingredient)
+            try context.save()
+        } catch {
+            self.error = error
         }
     }
     
     func save() {
 //        let category = storage.categories.first(where: { $0.id == categoryId })
-        let category = categories.first(where: { $0.id == categoryId })
+        category = categories.first(where: { $0 == category })
         
         do {
             switch mode {
