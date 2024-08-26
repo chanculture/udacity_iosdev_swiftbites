@@ -3,7 +3,6 @@ import SwiftData
 
 /// The main view that appears when the app is launched.
 struct ContentView: View {
-//  @Environment(\.storage) private var storage
     @Environment(\.modelContext) private var context
     @Query private var ingredients: [Ingredient]
     @Query private var categories: [Category]
@@ -25,9 +24,6 @@ struct ContentView: View {
           Label("Ingredients", systemImage: "carrot")
         }
     }
-//    .onAppear {
-//      storage.load()
-//    }
     .task{
         
 ////START UNCOMMENT

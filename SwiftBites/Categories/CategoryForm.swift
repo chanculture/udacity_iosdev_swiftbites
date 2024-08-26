@@ -1,5 +1,4 @@
 import SwiftUI
-//import SwiftData
 
 struct CategoryForm: View {
     enum Mode: Hashable {
@@ -69,7 +68,6 @@ struct CategoryForm: View {
     // MARK: - Data
     
     private func delete(category: Category) {
-//        storage.deleteCategory(id: category.id)
         context.delete(category)
         dismiss()
     }
@@ -78,10 +76,8 @@ struct CategoryForm: View {
         do {
             switch mode {
             case .add:
-//                try storage.addCategory(name: name)
                 context.insert(Category(name:name))
             case .edit(let category):
-//                try storage.updateCategory(id: category.id, name: name)
                 category.name = name
                 try context.save()
             }

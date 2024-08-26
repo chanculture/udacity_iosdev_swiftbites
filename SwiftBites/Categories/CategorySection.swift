@@ -4,16 +4,7 @@ import SwiftData
 struct CategorySection: View {
 
     var category: Category
-//    @Query (filter: #Predicate<Recipe> { $0.category == category })
-//    private var recipes: [Recipe]
-//    @Query private var categories: [Category]
-//    @Query private var recipes: [Recipe]
-    
-//    init() {
-//        _recipes = Query(filter: {
-//            return $0.category == category
-//        })
-//    }
+
     // MARK: - Body
     
     var body: some View {
