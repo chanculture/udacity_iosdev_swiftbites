@@ -3,7 +3,8 @@ import SwiftData
 
 struct RecipesView: View {
     
-    @Query private var recipes: [Recipe]
+    
+    @Query(FetchDescriptor<Recipe>()) private var recipes: [Recipe]
     @Environment(\.modelContext) private var context
     @State private var query = ""
     @State private var sortOrder = SortDescriptor(\Recipe.name)
@@ -27,6 +28,23 @@ struct RecipesView: View {
                 .navigationDestination(for: RecipeForm.Mode.self) { mode in
                     RecipeForm(mode: mode)
                 }
+        }
+    }
+    
+    var filteredRecipes: [Recipe] {
+        let recipesPredicate = #Predicate<Recipe> {
+            $0.name.localizedStandardContains(query)
+        }
+        
+        let descriptor = FetchDescriptor<Recipe>(
+            predicate: query.isEmpty ? nil : recipesPredicate
+        )
+        
+        do {
+            let filteredReceipes = try context.fetch(descriptor)
+            return filteredReceipes
+        } catch {
+            return []
         }
     }
     
@@ -62,13 +80,7 @@ struct RecipesView: View {
         if recipes.isEmpty {
             empty
         } else {
-            list(for: recipes.filter {
-                if query.isEmpty {
-                    return true
-                } else {
-                    return $0.name.localizedStandardContains(query) || $0.summary.localizedStandardContains(query)
-                }
-            }.sorted(using: sortOrder))
+            list(for: filteredRecipes.sorted(using: sortOrder))
         }
     }
     

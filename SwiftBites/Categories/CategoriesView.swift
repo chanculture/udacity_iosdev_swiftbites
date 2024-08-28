@@ -3,7 +3,7 @@ import SwiftData
 
 struct CategoriesView: View {
 
-    @Query(sort: \Category.name) private var categories: [Category]
+    @Query(FetchDescriptor<Category>()) private var categories: [Category]
     @Query private var recipes: [Recipe]
     @Environment(\.modelContext) private var context
     
@@ -31,6 +31,24 @@ struct CategoriesView: View {
         }
     }
     
+    var filteredCategories: [Category] {
+        let categoriesPredicate = #Predicate<Category> {
+            $0.name.localizedStandardContains(query)
+        }
+        
+        let descriptor = FetchDescriptor<Category>(
+            predicate: query.isEmpty ? nil : categoriesPredicate,
+            sortBy: [SortDescriptor(\Category.name, order: .forward)]
+        )
+        
+        do {
+            let filteredCatagories = try context.fetch(descriptor)
+            return filteredCatagories
+        } catch {
+            return []
+        }
+    }
+    
     // MARK: - Views
     
     @ViewBuilder
@@ -38,13 +56,7 @@ struct CategoriesView: View {
         if categories.isEmpty {
             empty
         } else {
-            list(for: categories.filter {
-                if query.isEmpty {
-                    return true
-                } else {
-                    return $0.name.localizedStandardContains(query)
-                }
-            })
+            list(for: filteredCategories)
         }
     }
     

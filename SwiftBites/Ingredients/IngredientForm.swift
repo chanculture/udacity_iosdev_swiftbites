@@ -26,7 +26,6 @@ struct IngredientForm: View {
     @State private var name: String
     @State private var error: Error?
     @Environment(\.modelContext) private var context
-    //  @Environment(\.storage) private var storage
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isNameFocused: Bool
     
