@@ -10,12 +10,16 @@ import SwiftData
 import SwiftUI
 
 class SwiftBitesContainer {
-    @MainActor
-    static func create() -> ModelContainer {
+    
+    let container: ModelContainer
+    
+    init() {
         let schema = Schema([Category.self, Ingredient.self, RecipeIngredient.self, Recipe.self])
         let configuration = ModelConfiguration()
-        let container = try! ModelContainer(for: schema, configurations: configuration)
-        return container
+        do {
+            self.container = try ModelContainer(for: schema, configurations: configuration)
+        } catch {
+            fatalError("Failed to initialize model container with error: \(error)")
+        }
     }
-
 }

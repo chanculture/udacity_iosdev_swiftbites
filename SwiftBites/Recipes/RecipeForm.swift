@@ -302,7 +302,7 @@ struct RecipeForm: View {
         }
     }
     
-    func save() {
+    private func save() {
         category = categories.first(where: { $0 == category })
         
         do {

@@ -3,10 +3,12 @@ import SwiftData
 
 @main
 struct SwiftBitesApp: App {
-  var body: some Scene {
-      WindowGroup {
-          ContentView()
-      }
-      .modelContainer(SwiftBitesContainer.create())
-  }
+    
+    let swiftBitesModelContainer = SwiftBitesContainer()
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+        .modelContainer(swiftBitesModelContainer.container)
+    }
 }
